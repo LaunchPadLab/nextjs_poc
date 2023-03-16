@@ -1,20 +1,29 @@
-import useSWR from 'swr'
-import PersonComponent from '../components/Person'
+import PersonComponent from '../components/Person';
+import prisma from '../lib/prisma';
 
-const fetcher = (url) => fetch(url).then((res) => res.json())
-
-export default function Index() {
-  const { data, error, isLoading } = useSWR('/api/people', fetcher)
-
-  if (error) return <div>Failed to load</div>
-  if (isLoading) return <div>Loading...</div>
-  if (!data) return null
-
+export function Index({people}) {
   return (
     <ul>
-      {data.map((p) => (
+      {people.map((p) => (
         <PersonComponent key={p.id} person={p} />
       ))}
     </ul>
   )
 }
+
+export const getStaticProps = async () => {
+    // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  // const res = await fetch('https://.../people')
+  // const posts = await res.json()
+
+  // By returning { props: { people } }, the Blog component
+  // will receive `people` as a prop at build time
+  const people = await prisma.person.findMany();
+  return {
+    props: { people },
+    revalidate: 10,
+  };
+};
+
+export default Index;
