@@ -1,8 +1,9 @@
-import {people} from '../../../data'
+import prisma from '../../../lib/prisma';
 
-export default function handler(
+export default async function handler(
   _req,
   res
 ) {
-  return res.status(200).json(people)
+  // confirm
+  return res.status(200).json(await prisma.person.findMany())
 }

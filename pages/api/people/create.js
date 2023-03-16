@@ -1,69 +1,33 @@
+import prisma from "../../../lib/prisma";
 export default async function personHandler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "only POST requests allowed" });
   }
-  const { person_name, height, mass, hair_color, skin_color, eye_color, gender } =
+  const { name, height, mass, hair_color, skin_color, eye_color, gender } =
     req.body;
 
-    console.log(req.body)
-
-  try {
-    const result = await makeRequest(
-    person_name,
-      height, 
-      mass, 
-      hair_color, 
-      skin_color, 
-      eye_color, 
-      gender
-    );
-    if ("error" in result) {
-      res.status(500).send(result);
-    } else {
-      res.status(200).send(result);
-    }
-  } catch (err) {
-    console.log(err)
-    res.status(500).send({ error: "failed to fetch data" });
-  }
-}
-
-async function makeRequest(
-    person_name,
-    height, 
-    mass, 
-    hair_color, 
-    skin_color, 
-    eye_color, 
-    gender
-) {
   const data = {
-    person_name,
-      height, 
-      mass, 
-      hair_color, 
-      skin_color, 
-      eye_color, 
-      gender
+    name,
+    height,
+    mass,
+    hair_color,
+    skin_color,
+    eye_color,
+    gender,
   };
 
-//   If we wanted to make a request to an external API, we could do it like this:
-
-//   const JSONdata = JSON.stringify(data);
-//   const endpoint = `${process.env.API_URL}/api/v1/people`;
-
-//   const options = {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     //   Authorization: `Bearer ${process.env.API_KEY}`,
-//     },
-//     body: JSONdata,
-//   };
-
-//   const response = await fetch(endpoint, options);
-  const response = data
-
-  const result = await response
-  return result;
+  try {
+    const person = await prisma.person.create({ data });
+    return res.status(200).json(person);
+  } catch (e) {
+    if (e) {
+      // The .code property can be accessed in a type-safe manner
+      if (e.code === "P2002") {
+        console.log(
+          "There is a unique constraint violation, a new user cannot be created with this email"
+        );
+      }
+    }
+    res.status(500).json(e.message);
+  }
 }
