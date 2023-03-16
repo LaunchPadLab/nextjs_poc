@@ -68,6 +68,11 @@ npx prisma migrate --name name_of_migration
 npx prisma db seed
 ```
 
+### Prisma GUI
+```bash
+npx prisma studio
+```
+
 ## Resources
 - https://vercel.com/guides/nextjs-prisma-postgres
 - https://www.prisma.io/nextjs
