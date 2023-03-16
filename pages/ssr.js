@@ -5,7 +5,7 @@ export default function SSR({ formattedDate }) {
       <>
         <h1>Server-side rendered page</h1>
         <p>
-          This page is server-side rendered. It was rendered on {formattedDate}.
+          This page is server-side rendered for AWS. It was rendered on {formattedDate}.
         </p>
         <p>
           <Link href="/">View a static page.</Link>
