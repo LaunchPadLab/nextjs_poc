@@ -15,9 +15,9 @@ npm run dev
 curl --location --request POST 'http://localhost:3000/api/people/create' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-     "person_name": "Owen",
-      "height": "6'\''00'\''" ,
-      "mass": "190lbs", 
+     "name": "Owen",
+      "height": "76" ,
+      "mass": 195, 
       "hair_color": "black", 
       "skin_color": "white", 
       "eye_color": "brown", 
@@ -25,13 +25,45 @@ curl --location --request POST 'http://localhost:3000/api/people/create' \
 }'
 ```
 
-## GET
+### GET
 
 ```bash
 curl --location --request GET 'http://localhost:3000/api/people/'
 ```
 
-## SHOW
+Accessed at: `http://localhost:3000/`
+
+### SHOW
 ```
-curl --location --request GET 'http://localhost:3000/api/people/1'
+curl --location --request GET 'http://localhost:3000/api/people/<id>'
+```
+
+Accessed at: `http://localhost:3000/person/<id>`
+
+## PRISMA
+
+### Requirements
+- need a local postgres database
+```bash
+postgres-> CREATE DATABASE mydatabase;
+```
+
+- create a .env file at root of project
+```env
+DATABASE_URL="postgres://user@localhost/mydatabase"
+```
+
+### Setting Up Prisma Connection
+
+```bash
+npx prisma db push
+```
+
+### Migrate
+```bash
+npx prisma migrate --name name_of_migration
+```
+### Seed the DB
+```bash
+npx prisma db seed
 ```
