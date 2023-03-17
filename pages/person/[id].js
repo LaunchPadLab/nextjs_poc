@@ -35,14 +35,20 @@ export function PersonPage({person}) {
 }
 
 export const getServerSideProps = async ({ params }) => {
-  const person = await prisma.person.findUnique({
-    where: {
-      id: String(params?.id),
-    },
-  });
-  return {
-    props: {person},
-  };
+  try {
+    const person = await prisma.person.findUnique({
+      where: {
+        id: String(params?.id),
+      },
+    });
+    return {
+      props: {person},
+    };
+    
+  } catch (error) {
+    console.log(error)
+  }
+ 
 
 };
 

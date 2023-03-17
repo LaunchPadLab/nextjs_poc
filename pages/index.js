@@ -19,11 +19,16 @@ export const getStaticProps = async () => {
 
   // By returning { props: { people } }, the Blog component
   // will receive `people` as a prop at build time
-  const people = await prisma.person.findMany();
-  return {
-    props: { people },
-    revalidate: 10,
-  };
+  try {
+    const people = await prisma.person.findMany();
+    return {
+      props: { people },
+      revalidate: 10,
+    };
+  } catch (error) {
+    console.log(error)
+  }
+ 
 };
 
 export default Index;
