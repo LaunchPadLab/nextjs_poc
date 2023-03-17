@@ -1,6 +1,24 @@
-import prisma from "../../lib/prisma";
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
 
-export function PersonPage({person}) {
+const fetcher = async (url) => {
+  const res = await fetch(url)
+  const data = await res.json()
+
+  if (res.status !== 200) {
+    throw new Error(data.message)
+  }
+  return data
+}
+
+export default function PersonPage() {
+  const { query } = useRouter()
+  const { data, error, isLoading, isValidating } = useSWR(() => (query.id ? `/api/people/${query.id}` : null), fetcher)
+
+  if (error) return <div>{error.message}</div>
+  if (isLoading) return <div>Loading...</div>
+  if (!data) return null
+
   return (
     <table>
       <thead>
@@ -16,40 +34,23 @@ export function PersonPage({person}) {
       </thead>
       <tbody>
         <tr>
-          {person && (
+          {isValidating ? (
+            <td colSpan={7} align="center">
+              Validating...
+            </td>
+          ) : (
             <>
-              <td>{person.name}</td>
-              <td>{person.height}</td>
-              <td>{person.mass}</td>
-              <td>{person.hair_color}</td>
-              <td>{person.skin_color}</td>
-              <td>{person.eye_color}</td>
-              <td>{person.gender}</td>
+              <td>{data.name}</td>
+              <td>{data.height}</td>
+              <td>{data.mass}</td>
+              <td>{data.hair_color}</td>
+              <td>{data.skin_color}</td>
+              <td>{data.eye_color}</td>
+              <td>{data.gender}</td>
             </>
           )}
         </tr>
       </tbody>
     </table>
   )
-  
 }
-
-export const getServerSideProps = async ({ params }) => {
-  try {
-    const person = await prisma.person.findUnique({
-      where: {
-        id: String(params?.id),
-      },
-    });
-    return {
-      props: {person},
-    };
-    
-  } catch (error) {
-    console.log(error)
-  }
- 
-
-};
-
-export default PersonPage;
