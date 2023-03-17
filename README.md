@@ -2,11 +2,19 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Local Setup:
+
+```bash
+npm install
+```
 
 ```bash
 npm run dev
 ```
+
+## AWS
+- DEPLOYED AT: https://main.d2b4yulnfsl0ij.amplifyapp.com 
+- AWS Amplify Console: https://us-east-2.console.aws.amazon.com/amplify/home?region=us-east-2#/d2b4yulnfsl0ij
 
 ## API
 
