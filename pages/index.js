@@ -10,6 +10,8 @@ export default function Index() {
   if (isLoading) return <div>Loading...</div>
   if (!data) return null
 
+  console.log(process.env.DATABASE_URL)
+
   return (
     <ul>
       {data.map((p) => (
